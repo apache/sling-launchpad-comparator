@@ -17,8 +17,10 @@
 package org.apache.sling.tooling.lc.svn;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -45,8 +47,16 @@ public class SvnChangeLogFinder {
         
         SVNRepository repo = manager.getRepositoryPool().createRepository(svnUrl, true);
         
-        SVNRevision from = SVNRevision.create(getRevision(first, repo));
-        SVNRevision to = SVNRevision.create(getRevision(second, repo));
+        final long fromRev = getRevision(first, repo);
+        final long toRev = getRevision(second, repo);
+        
+        if ( fromRev == -1 || toRev == -1 ) {
+            System.err.println("Failed retrieving changes from SVN; revisions were " + fromRev + " and " + toRev);
+            return Collections.emptyList();
+        }
+        
+        SVNRevision from = SVNRevision.create(fromRev);
+        SVNRevision to = SVNRevision.create(toRev);
         
         repo.log(new String[] { "tags/" + second } ,from.getNumber(), to.getNumber(), false, false, (e) -> changes.add(e.getMessage()));
         
@@ -56,7 +66,11 @@ public class SvnChangeLogFinder {
 
     private long getRevision(String tagName, SVNRepository repo) throws SVNException {
         
-        return repo.info("tags/" + tagName, -1).getRevision();
+        SVNDirEntry info = repo.info("tags/" + tagName, -1);
+        if ( info == null ) 
+            return -1;
+        
+        return info.getRevision();
     }
 
 }
