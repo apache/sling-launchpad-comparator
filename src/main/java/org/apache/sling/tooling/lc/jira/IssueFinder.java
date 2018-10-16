@@ -44,6 +44,10 @@ public class IssueFinder {
     
     public List<Issue> findIssues(List<String> issueKeys) throws IOException{
         
+        if ( issueKeys.isEmpty() ) {
+            return Collections.emptyList();
+        }
+        
         HttpClient client = new DefaultHttpClient();
         
         HttpGet get;
