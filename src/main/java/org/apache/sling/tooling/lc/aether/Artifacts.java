@@ -38,7 +38,8 @@ public class Artifacts {
             return "org.apache.sling:org.apache.sling.launchpad:xml:bundlelist:" + version;
         }
         
+        String artifactId = versionNumber < 10 ? "org.apache.sling.launchpad" : "org.apache.sling.starter"; 
         // versions 8 and newer use the provisioning model
-        return "org.apache.sling:org.apache.sling.launchpad:txt:slingfeature:" + version;
+        return "org.apache.sling:" + artifactId + ":txt:slingfeature:" + version;
     }
 }
