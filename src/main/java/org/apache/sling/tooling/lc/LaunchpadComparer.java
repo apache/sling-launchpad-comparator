@@ -38,9 +38,9 @@ import org.apache.sling.tooling.lc.aether.AetherSetup;
 import org.apache.sling.tooling.lc.aether.ArtifactKey;
 import org.apache.sling.tooling.lc.aether.Artifacts;
 import org.apache.sling.tooling.lc.aether.VersionChange;
+import org.apache.sling.tooling.lc.git.GitChangeLogFinder;
 import org.apache.sling.tooling.lc.jira.IssueFinder;
-import org.apache.sling.tooling.lc.svn.SvnChangeLogFinder;
-import org.tmatesoft.svn.core.SVNException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import com.google.common.collect.Sets;
 
@@ -50,10 +50,12 @@ public class LaunchpadComparer {
 
     private final String firstVersion;
     private final String secondVersion;
+    private final String slingRepoCheckout;
 
-    public LaunchpadComparer(String firstVersion, String secondVersion) {
+    public LaunchpadComparer(String firstVersion, String secondVersion, String slingRepoCheckout) {
         this.firstVersion = firstVersion;
         this.secondVersion = secondVersion;
+        this.slingRepoCheckout = slingRepoCheckout;
     }
 
     public void run() throws Exception {
@@ -98,7 +100,7 @@ public class LaunchpadComparer {
         System.out.println("Changed");
         changed.entrySet().stream()
             .sorted( (a, b) -> a.getKey().compareTo(b.getKey()) )
-            .forEach(LaunchpadComparer::outputFormatted);        
+            .forEach(this::outputFormatted);        
         
     }
 
@@ -122,7 +124,7 @@ public class LaunchpadComparer {
         
     }
 
-    private static void outputFormatted(Map.Entry<ArtifactKey, VersionChange> e) {
+    private void outputFormatted(Map.Entry<ArtifactKey, VersionChange> e) {
         
         ArtifactKey artifact = e.getKey();
         VersionChange versionChange = e.getValue();
@@ -133,12 +135,10 @@ public class LaunchpadComparer {
             return;
         }
         
-        SvnChangeLogFinder svn = new SvnChangeLogFinder();
+        GitChangeLogFinder git = new GitChangeLogFinder(slingRepoCheckout);
         
-        String fromTag = artifact.getArtifactId()+"-"+versionChange.getFrom();
-        String toTag = artifact.getArtifactId()+"-"+ versionChange.getTo();
         try {
-            List<String> issues = svn.getChanges(fromTag, toTag)
+            List<String> issues = git.getChanges(artifact.getArtifactId(), versionChange.getFrom(), versionChange.getTo())
                 .stream()
                 .map( m -> m.split(System.lineSeparator())[0])
                 .map(LaunchpadComparer::toJiraKey)
@@ -149,7 +149,7 @@ public class LaunchpadComparer {
             issueFinder.findIssues(issues).
                 forEach( i -> System.out.format("        %-10s - %s%n", i.getKey(), i.getSummary()));
             
-        } catch (SVNException | IOException e1) {
+        } catch (GitAPIException | IOException e1) {
             System.err.println("Failed retrieving changes : " + e1.getMessage());
         }
     }

@@ -27,6 +27,6 @@ public class Main {
             secondVersion = args[1];
         }
         
-        new LaunchpadComparer(firstVersion, secondVersion).run();
+        new LaunchpadComparer(firstVersion, secondVersion, "..").run();
     }
 }
