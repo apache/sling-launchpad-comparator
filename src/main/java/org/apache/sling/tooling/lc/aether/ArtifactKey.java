@@ -20,18 +20,22 @@ package org.apache.sling.tooling.lc.aether;
 
 import java.util.Objects;
 
-import org.apache.sling.provisioning.model.Artifact;
+import org.apache.sling.feature.Artifact;
+import org.apache.sling.feature.ArtifactId;
 
 public class ArtifactKey implements Comparable<ArtifactKey> {
 
-    private String groupId;
-    private String artifactId;
-    private String classifier;
-    private String type;
+    private final String groupId;
+    private final String artifactId;
+    private final String classifier;
+    private final String type;
 
     public ArtifactKey(Artifact artifact) {
-
-        this(artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier(), artifact.getType());
+        this(
+                artifact.getId().getGroupId(),
+                artifact.getId().getArtifactId(),
+                artifact.getId().getClassifier(),
+                artifact.getId().getType());
     }
 
     private ArtifactKey(String groupId, String artifactId, String classifier, String type) {
@@ -43,7 +47,6 @@ public class ArtifactKey implements Comparable<ArtifactKey> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(artifactId, classifier, groupId, type);
     }
 
@@ -80,7 +83,6 @@ public class ArtifactKey implements Comparable<ArtifactKey> {
 
     @Override
     public String toString() {
-
         return "Artifact [groupId=" + groupId + ", artifactId=" + artifactId + ", classifier=" + classifier + ", type="
                 + type + "]";
     }
@@ -88,8 +90,8 @@ public class ArtifactKey implements Comparable<ArtifactKey> {
     @Override
     public int compareTo(ArtifactKey o) {
 
-        Artifact us = new Artifact(groupId, artifactId, "0.0.0", classifier, type);
-        Artifact them = new Artifact(o.groupId, o.artifactId, "0.0.0", o.classifier, o.type);
+        ArtifactId us = new ArtifactId(groupId, artifactId, "0.0.0", classifier, type);
+        ArtifactId them = new ArtifactId(o.groupId, o.artifactId, "0.0.0", o.classifier, o.type);
 
         return us.compareTo(them);
     }

@@ -30,13 +30,11 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.google.common.collect.Sets;
-import org.apache.sling.provisioning.model.Artifact;
-import org.apache.sling.provisioning.model.Model;
-import org.apache.sling.provisioning.model.ModelUtility;
-import org.apache.sling.provisioning.model.io.ModelReader;
+import org.apache.sling.feature.Artifact;
+import org.apache.sling.feature.Feature;
+import org.apache.sling.feature.io.json.FeatureJSONReader;
 import org.apache.sling.tooling.lc.aether.AetherSetup;
 import org.apache.sling.tooling.lc.aether.ArtifactKey;
 import org.apache.sling.tooling.lc.aether.Artifacts;
@@ -71,8 +69,8 @@ public class LaunchpadComparer {
         File toFile = aether.download(Artifacts.launchpadCoordinates(secondVersion));
 
         // 2. parse artifact definitions
-        Map<ArtifactKey, Artifact> from = readArtifactsFromModel(fromFile);
-        Map<ArtifactKey, Artifact> to = readArtifactsFromModel(toFile);
+        Map<ArtifactKey, Artifact> from = readArtifactsFromOsgiFeature(fromFile);
+        Map<ArtifactKey, Artifact> to = readArtifactsFromOsgiFeature(toFile);
 
         // 3. generate added / removed / changed
         Set<Artifact> removed = Sets.difference(from.keySet(), to.keySet()).stream()
@@ -86,11 +84,13 @@ public class LaunchpadComparer {
         Map<ArtifactKey, VersionChange> changed = to.values().stream()
                 .filter(k -> !added.contains(k) && !removed.contains(k))
                 .map(k -> new ArtifactKey(k))
-                .filter(k -> !Objects.equals(to.get(k).getVersion(), from.get(k).getVersion()))
+                .filter(k -> !Objects.equals(
+                        to.get(k).getId().getVersion(), from.get(k).getId().getVersion()))
                 .collect(Collectors.toMap(
                         Function.identity(),
                         k -> new VersionChange(
-                                from.get(k).getVersion(), to.get(k).getVersion())));
+                                from.get(k).getId().getVersion(),
+                                to.get(k).getId().getVersion())));
 
         // 4. output changes
 
@@ -106,23 +106,20 @@ public class LaunchpadComparer {
                 .forEach(this::outputFormatted);
     }
 
-    private Map<ArtifactKey, Artifact> readArtifactsFromModel(File toFile) throws IOException {
-        Model fromModel;
+    private Map<ArtifactKey, Artifact> readArtifactsFromOsgiFeature(File toFile) throws IOException {
+        Feature fromFeature;
         try (BufferedReader reader = Files.newBufferedReader(toFile.toPath())) {
-            fromModel = ModelUtility.getEffectiveModel(ModelReader.read(reader, null));
+            fromFeature = FeatureJSONReader.read(reader, toFile.toPath().toString());
         }
-
-        Map<ArtifactKey, Artifact> to = fromModel.getFeatures().stream()
-                .flatMap(f -> f.getRunModes().stream())
-                .flatMap(r -> r.getArtifactGroups().stream())
-                .flatMap(g -> StreamSupport.stream(g.spliterator(), false))
+        return fromFeature.getBundles().stream()
                 .collect(Collectors.toMap(a -> new ArtifactKey(a), Function.identity()));
-        return to;
     }
 
     private static void outputFormatted(Artifact a) {
 
-        System.out.format("    %-30s : %-55s : %s%n", a.getGroupId(), a.getArtifactId(), a.getVersion());
+        System.out.format(
+                "    %-30s : %-55s : %s%n",
+                a.getId().getGroupId(), a.getId().getArtifactId(), a.getId().getVersion());
     }
 
     private void outputFormatted(Map.Entry<ArtifactKey, VersionChange> e) {
