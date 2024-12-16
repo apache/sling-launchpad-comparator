@@ -19,7 +19,7 @@ checkout:
 Afterwards build and run this project
 
     mvn clean package
-    java -jar target/launchpad-comparator-0.9.0-SNAPSHOT.jar 10 11-SNAPSHOT
+    java -jar target/launchpad-comparator-1.0.0-SNAPSHOT.jar 12 13-SNAPSHOT
 
 The report will list:
 

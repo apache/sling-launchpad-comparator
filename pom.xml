@@ -19,7 +19,7 @@
     </parent>
     <groupId>org.apache.sling.tooling</groupId>
     <artifactId>launchpad-comparator</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Apache Sling Launchpad Comparator</name>
     <description>Command line utility which helps with comparing the artifacts contained by two launchpad instances.</description>
 
