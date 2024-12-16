@@ -41,7 +41,7 @@ import org.eclipse.aether.transport.http.HttpTransporterFactory;
 public class AetherSetup {
 
     private final List<RemoteRepository> repos = Arrays.asList(
-            new RemoteRepository.Builder("central", "default", "http://central.maven.org/maven2/").build(),
+            new RemoteRepository.Builder("central", "default", "https://repo1.maven.org/maven2/").build(),
             new RemoteRepository.Builder("apache", "default", "https://repository.apache.org/content/groups/snapshots/")
                     .build());
 

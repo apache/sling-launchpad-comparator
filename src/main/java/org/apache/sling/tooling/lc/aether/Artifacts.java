@@ -33,15 +33,7 @@ public class Artifacts {
             throw new IllegalArgumentException("Invalid version " + version);
         }
 
-        int versionNumber = Integer.parseInt(versionMatcher.group(1));
-
-        // versions 6 and 7 used an XML bundle list
-        if (versionNumber < 8) {
-            return "org.apache.sling:org.apache.sling.launchpad:xml:bundlelist:" + version;
-        }
-
-        String artifactId = versionNumber < 10 ? "org.apache.sling.launchpad" : "org.apache.sling.starter";
         // versions 8 and newer use the provisioning model
-        return "org.apache.sling:" + artifactId + ":txt:slingfeature:" + version;
+        return "org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:" + version;
     }
 }
