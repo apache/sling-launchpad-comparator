@@ -22,36 +22,23 @@ import org.junit.Test;
 
 import static org.apache.sling.tooling.lc.aether.Artifacts.launchpadCoordinates;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ArtifactsTest {
 
     @Test
-    public void launchpadV7() {
+    public void launchpadV12() {
 
-        assertThat(launchpadCoordinates("7"), equalTo("org.apache.sling:org.apache.sling.launchpad:xml:bundlelist:7"));
+        assertThat(
+                launchpadCoordinates("12"),
+                equalTo("org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:12"));
     }
 
     @Test
-    public void launchpadV7Snapshot() {
+    public void launchpadV13Snapshot() {
 
         assertThat(
-                launchpadCoordinates("7-SNAPSHOT"),
-                equalTo("org.apache.sling:org.apache.sling.launchpad:xml:bundlelist:7-SNAPSHOT"));
-    }
-
-    @Test
-    public void launchpadV8() {
-
-        assertThat(
-                launchpadCoordinates("8"), equalTo("org.apache.sling:org.apache.sling.launchpad:txt:slingfeature:8"));
-    }
-
-    @Test
-    public void launchpadV8Snapshot() {
-
-        assertThat(
-                launchpadCoordinates("8-SNAPSHOT"),
-                equalTo("org.apache.sling:org.apache.sling.launchpad:txt:slingfeature:8-SNAPSHOT"));
+                launchpadCoordinates("13-SNAPSHOT"),
+                equalTo("org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:13-SNAPSHOT"));
     }
 }

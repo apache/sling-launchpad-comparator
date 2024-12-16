@@ -22,8 +22,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        String firstVersion = "8";
-        String secondVersion = "9";
+        String firstVersion = "12";
+        String secondVersion = "13-SNAPSHOT";
         if (args.length == 2) {
             firstVersion = args[0];
             secondVersion = args[1];

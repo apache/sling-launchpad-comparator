@@ -81,7 +81,7 @@ public class GitChangeLogFinder {
     private Ref getTagChecked(Repository repository, String artifactId, String version) throws IOException {
 
         final String tagName = artifactId + "-" + version;
-        final Ref ref = repository.getRefDatabase().getRef(Constants.R_TAGS + tagName);
+        final Ref ref = repository.getRefDatabase().findRef(Constants.R_TAGS + tagName);
         if (ref == null)
             throw new RuntimeException("No tag " + tagName + " found in git repo at " + repository.getDirectory());
         return ref;
