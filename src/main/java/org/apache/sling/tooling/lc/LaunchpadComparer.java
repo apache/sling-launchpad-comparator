@@ -112,7 +112,7 @@ public class LaunchpadComparer {
             fromFeature = FeatureJSONReader.read(reader, toFile.toPath().toString());
         }
         return fromFeature.getBundles().stream()
-                .collect(Collectors.toMap(a -> new ArtifactKey(a), Function.identity()));
+                .collect(Collectors.toMap(a -> new ArtifactKey(a), Function.identity(), (first, second) -> second));
     }
 
     private static void outputFormatted(Artifact a) {
