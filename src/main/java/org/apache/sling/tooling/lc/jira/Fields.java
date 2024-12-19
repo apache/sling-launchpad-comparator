@@ -21,12 +21,18 @@ package org.apache.sling.tooling.lc.jira;
 public class Fields {
 
     private final String summary;
+    private final IssueType issuetype;
 
-    public Fields(String summary) {
+    public Fields(String summary, IssueType issuetype) {
         this.summary = summary;
+        this.issuetype = issuetype;
     }
 
     public String getSummary() {
         return summary;
+    }
+
+    public IssueType getIssuetype() {
+        return issuetype;
     }
 }

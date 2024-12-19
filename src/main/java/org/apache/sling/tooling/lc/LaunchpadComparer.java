@@ -40,6 +40,7 @@ import org.apache.sling.tooling.lc.aether.ArtifactKey;
 import org.apache.sling.tooling.lc.aether.Artifacts;
 import org.apache.sling.tooling.lc.aether.VersionChange;
 import org.apache.sling.tooling.lc.git.GitChangeLogFinder;
+import org.apache.sling.tooling.lc.jira.Issue;
 import org.apache.sling.tooling.lc.jira.IssueFinder;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -49,12 +50,18 @@ public class LaunchpadComparer {
 
     private final String firstVersion;
     private final String secondVersion;
+    private final String output;
     private final String slingRepoCheckout;
 
-    public LaunchpadComparer(String firstVersion, String secondVersion, String slingRepoCheckout) {
+    public LaunchpadComparer(String firstVersion, String secondVersion, String output, String slingRepoCheckout) {
         this.firstVersion = firstVersion;
         this.secondVersion = secondVersion;
+        this.output = output;
         this.slingRepoCheckout = slingRepoCheckout;
+    }
+
+    private boolean isMarkdown() {
+        return "markdown".equals(output);
     }
 
     public void run() throws Exception {
@@ -94,13 +101,13 @@ public class LaunchpadComparer {
 
         // 4. output changes
 
-        System.out.println("Added ");
-        added.stream().sorted().forEach(LaunchpadComparer::outputFormatted);
+        System.out.println("\nAdded:");
+        added.stream().sorted().forEach(this::outputFormatted);
 
-        System.out.println("Removed ");
-        removed.stream().sorted().forEach(LaunchpadComparer::outputFormatted);
+        System.out.println("\nRemoved:");
+        removed.stream().sorted().forEach(this::outputFormatted);
 
-        System.out.println("Changed");
+        System.out.println("\nChanged:");
         changed.entrySet().stream()
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
                 .forEach(this::outputFormatted);
@@ -115,11 +122,16 @@ public class LaunchpadComparer {
                 .collect(Collectors.toMap(a -> new ArtifactKey(a), Function.identity(), (first, second) -> second));
     }
 
-    private static void outputFormatted(Artifact a) {
-
-        System.out.format(
-                "    %-30s : %-55s : %s%n",
-                a.getId().getGroupId(), a.getId().getArtifactId(), a.getId().getVersion());
+    private void outputFormatted(Artifact a) {
+        if (isMarkdown()) {
+            System.out.format(
+                    "* `%s`:**`%s`** %s%n",
+                    a.getId().getGroupId(), a.getId().getArtifactId(), a.getId().getVersion());
+        } else {
+            System.out.format(
+                    "    %-30s : %-55s : %s%n",
+                    a.getId().getGroupId(), a.getId().getArtifactId(), a.getId().getVersion());
+        }
     }
 
     private void outputFormatted(Map.Entry<ArtifactKey, VersionChange> e) {
@@ -127,9 +139,15 @@ public class LaunchpadComparer {
         ArtifactKey artifact = e.getKey();
         VersionChange versionChange = e.getValue();
 
-        System.out.format(
-                "    %-30s : %-55s : %s -> %s%n",
-                artifact.getGroupId(), artifact.getArtifactId(), versionChange.getFrom(), versionChange.getTo());
+        if (isMarkdown()) {
+            System.out.format(
+                    "* `%s`:**`%s`** %s -> %s%n",
+                    artifact.getGroupId(), artifact.getArtifactId(), versionChange.getFrom(), versionChange.getTo());
+        } else {
+            System.out.format(
+                    "    %-30s : %-55s : %s -> %s%n",
+                    artifact.getGroupId(), artifact.getArtifactId(), versionChange.getFrom(), versionChange.getTo());
+        }
 
         if (!artifact.getGroupId().equals("org.apache.sling")) {
             return;
@@ -138,17 +156,21 @@ public class LaunchpadComparer {
         GitChangeLogFinder git = new GitChangeLogFinder(slingRepoCheckout);
 
         try {
-            List<String> issues =
+            List<String> issueKeys =
                     git.getChanges(artifact.getArtifactId(), versionChange.getFrom(), versionChange.getTo()).stream()
                             .map(m -> m.split(System.lineSeparator())[0])
                             .map(LaunchpadComparer::toJiraKey)
                             .filter(k -> k != null)
                             .collect(Collectors.toList());
 
-            IssueFinder issueFinder = new IssueFinder();
-            issueFinder
-                    .findIssues(issues)
-                    .forEach(i -> System.out.format("        %-10s - %s%n", i.getKey(), i.getSummary()));
+            List<Issue> issues = new IssueFinder().findIssues(issueKeys);
+            if (isMarkdown()) {
+                issues.forEach(i -> System.out.format(
+                        "    * [%s %s](https://issues.apache.org/jira/browse/%s) (%s)%n",
+                        i.getKey(), i.getSummary(), i.getKey(), i.getIssueType()));
+            } else {
+                issues.forEach(i -> System.out.format("        %-10s - %s%n", i.getKey(), i.getSummary()));
+            }
 
         } catch (GitAPIException | IOException e1) {
             System.err.println("Failed retrieving changes : " + e1.getMessage());

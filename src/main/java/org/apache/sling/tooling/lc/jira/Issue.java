@@ -46,6 +46,10 @@ public class Issue implements Comparable<Issue> {
         return fields.getSummary();
     }
 
+    public String getIssueType() {
+        return fields.getIssuetype().getName();
+    }
+
     @Override
     public String toString() {
         return key + " - " + getSummary();

@@ -42,7 +42,7 @@ public class GitChangeLogFinder {
     private final String slingRepoCheckoutDir;
 
     /**
-     * @param slingRepoCheckoutDir the <tt>repo</tt> root for Apache Sling
+     * @param slingRepoCheckoutDir the repo root for Apache Sling
      */
     public GitChangeLogFinder(String slingRepoCheckoutDir) {
         this.slingRepoCheckoutDir = slingRepoCheckoutDir;

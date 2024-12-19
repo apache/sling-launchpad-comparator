@@ -16,23 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc;
+package org.apache.sling.tooling.lc.jira;
 
-public class Main {
+public class IssueType {
 
-    public static void main(String[] args) throws Exception {
+    private final String name;
 
-        String firstVersion = "12";
-        String secondVersion = "13-SNAPSHOT";
-        String output = "plaintext";
-        if (args.length == 2) {
-            firstVersion = args[0];
-            secondVersion = args[1];
-        }
-        if (args.length == 3) {
-            output = args[2];
-        }
+    public IssueType(String name) {
+        this.name = name;
+    }
 
-        new LaunchpadComparer(firstVersion, secondVersion, output, "..").run();
+    public String getName() {
+        return name;
     }
 }
