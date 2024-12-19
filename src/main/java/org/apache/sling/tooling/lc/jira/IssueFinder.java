@@ -54,7 +54,7 @@ public class IssueFinder {
         try {
             URIBuilder builder = new URIBuilder("https://issues.apache.org/jira/rest/api/2/search")
                     .addParameter("jql", "key in (" + String.join(",", issueKeys) + ")")
-                    .addParameter("fields", "key,summary");
+                    .addParameter("fields", "key,summary,issuetype");
 
             get = new HttpGet(builder.build());
         } catch (URISyntaxException e) {
