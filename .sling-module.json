@@ -1,4 +1,5 @@
 {
+  "sonarQubeEnabled": false,
   "jenkins": {
     "jdks": [17, 21]
   }
