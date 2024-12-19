@@ -54,28 +54,28 @@ public class GitChangeLogFinder {
 
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
 
-        Repository repository = repositoryBuilder
+        try (Repository repository = repositoryBuilder
                 .setGitDir(repoPath.toFile())
                 .readEnvironment() // scan environment GIT_* variables
                 .findGitDir() // scan up the file system tree
                 .setMustExist(true)
-                .build();
+                .build()) {
 
-        Ref fromTag = getTagChecked(repository, artifactId, from);
-        Ref toTag = getTagChecked(repository, artifactId, to);
+            Ref fromTag = getTagChecked(repository, artifactId, from);
+            Ref toTag = getTagChecked(repository, artifactId, to);
 
-        Git git = Git.wrap(repository);
+            Git git = Git.wrap(repository);
 
-        fromTag = repository.getRefDatabase().peel(fromTag);
-        toTag = repository.getRefDatabase().peel(toTag);
+            fromTag = repository.getRefDatabase().peel(fromTag);
+            toTag = repository.getRefDatabase().peel(toTag);
 
-        List<String> commits = new ArrayList<>();
-        git.log()
-                .addRange(fromTag.getPeeledObjectId(), toTag.getPeeledObjectId())
-                .call()
-                .forEach(c -> commits.add(c.getShortMessage()));
-
-        return commits;
+            List<String> commits = new ArrayList<>();
+            git.log()
+                    .addRange(fromTag.getPeeledObjectId(), toTag.getPeeledObjectId())
+                    .call()
+                    .forEach(c -> commits.add(c.getShortMessage()));
+            return commits;
+        }
     }
 
     private Ref getTagChecked(Repository repository, String artifactId, String version) throws IOException {
