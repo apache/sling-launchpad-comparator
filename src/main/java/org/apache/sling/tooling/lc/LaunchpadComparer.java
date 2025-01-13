@@ -101,13 +101,13 @@ public class LaunchpadComparer {
 
         // 4. output changes
 
-        System.out.println("\nAdded:");
+        System.out.println("\nAdded:\n");
         added.stream().sorted().forEach(this::outputFormatted);
 
-        System.out.println("\nRemoved:");
+        System.out.println("\nRemoved:\n");
         removed.stream().sorted().forEach(this::outputFormatted);
 
-        System.out.println("\nChanged:");
+        System.out.println("\nChanged:\n");
         changed.entrySet().stream()
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
                 .forEach(this::outputFormatted);
