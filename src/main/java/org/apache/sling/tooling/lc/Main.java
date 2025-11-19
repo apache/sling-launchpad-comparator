@@ -25,11 +25,11 @@ public class Main {
         String firstVersion = "12";
         String secondVersion = "13-SNAPSHOT";
         String output = "plaintext";
-        if (args.length == 2) {
+        if (args.length >= 2) {
             firstVersion = args[0];
             secondVersion = args[1];
         }
-        if (args.length == 3) {
+        if (args.length >= 3) {
             output = args[2];
         }
 
