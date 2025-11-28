@@ -1,12 +1,12 @@
 [![Apache Sling](https://sling.apache.org/res/logos/sling.png)](https://sling.apache.org)
 
-&#32;[![Build Status](https://ci-builds.apache.org/job/Sling/job/modules/job/sling-launchpad-comparator/job/master/badge/icon)](https://ci-builds.apache.org/job/Sling/job/modules/job/sling-launchpad-comparator/job/master/)&#32;[![Test Status](https://img.shields.io/jenkins/tests.svg?jobUrl=https://ci-builds.apache.org/job/Sling/job/modules/job/sling-launchpad-comparator/job/master/)](https://ci-builds.apache.org/job/Sling/job/modules/job/sling-launchpad-comparator/job/master/test/?width=800&height=600)&#32;[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=apache_sling-launchpad-comparator&metric=coverage)](https://sonarcloud.io/dashboard?id=apache_sling-launchpad-comparator)&#32;[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=apache_sling-launchpad-comparator&metric=alert_status)](https://sonarcloud.io/dashboard?id=apache_sling-launchpad-comparator) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+&#32;[![Build Status](https://ci-builds.apache.org/job/Sling/job/modules/job/sling-starter-comparator/job/master/badge/icon)](https://ci-builds.apache.org/job/Sling/job/modules/job/sling-starter-comparator/job/master/)&#32;[![Test Status](https://img.shields.io/jenkins/tests.svg?jobUrl=https://ci-builds.apache.org/job/Sling/job/modules/job/sling-starter-comparator/job/master/)](https://ci-builds.apache.org/job/Sling/job/modules/job/sling-starter-comparator/job/master/test/?width=800&height=600)&#32;[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=apache_sling-starter-comparator&metric=coverage)](https://sonarcloud.io/dashboard?id=apache_sling-starter-comparator)&#32;[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=apache_sling-starter-comparator&metric=alert_status)](https://sonarcloud.io/dashboard?id=apache_sling-starter-comparator) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-# Apache Sling Launchpad Comparator
+# Apache Sling Starter Comparator
 
 This module is part of the [Apache Sling](https://sling.apache.org) project.
 
-Command line utility which helps with comparing the artifacts contained by two launchpad/starter instances.
+Command line utility which helps with comparing the artifacts contained by two starter instances.
 
 ## Usage
 
@@ -19,12 +19,12 @@ checkout:
 Afterwards build and run this project
 
     mvn clean package
-    java -jar target/launchpad-comparator-1.0.0-SNAPSHOT.jar 12 13-SNAPSHOT 
+    java -jar target/starter-comparator-1.0.0-SNAPSHOT.jar 12 13-SNAPSHOT 
 
 If you want to output the result in markdown instead of plain text, use
 
     mvn clean package
-    java -jar target/launchpad-comparator-1.0.0-SNAPSHOT.jar 12 13-SNAPSHOT markdown
+    java -jar target/starter-comparator-1.0.0-SNAPSHOT.jar 12 13-SNAPSHOT markdown
 
 The report will list:
 

@@ -16,28 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.aether;
+package org.apache.sling.tooling.sc.jira;
 
-public class VersionChange {
+import java.util.List;
 
-    private String from;
-    private String to;
+public class Response {
 
-    public VersionChange(String from, String to) {
-        this.from = from;
-        this.to = to;
+    private final List<Issue> issues;
+
+    public Response(List<Issue> issues) {
+        this.issues = issues;
     }
 
-    public String getFrom() {
-        return from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    @Override
-    public String toString() {
-        return "VersionChange [" + from + " -> " + to + "]";
+    public List<Issue> getIssues() {
+        return issues;
     }
 }

@@ -16,19 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.jira;
+package org.apache.sling.tooling.sc.jira;
 
-import java.util.List;
+public class Fields {
 
-public class Response {
+    private final String summary;
+    private final IssueType issuetype;
 
-    private final List<Issue> issues;
-
-    public Response(List<Issue> issues) {
-        this.issues = issues;
+    public Fields(String summary, IssueType issuetype) {
+        this.summary = summary;
+        this.issuetype = issuetype;
     }
 
-    public List<Issue> getIssues() {
-        return issues;
+    public String getSummary() {
+        return summary;
+    }
+
+    public IssueType getIssuetype() {
+        return issuetype;
     }
 }

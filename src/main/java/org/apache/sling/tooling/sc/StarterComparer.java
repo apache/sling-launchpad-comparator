@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc;
+package org.apache.sling.tooling.sc;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,16 +35,16 @@ import com.google.common.collect.Sets;
 import org.apache.sling.feature.Artifact;
 import org.apache.sling.feature.Feature;
 import org.apache.sling.feature.io.json.FeatureJSONReader;
-import org.apache.sling.tooling.lc.aether.AetherSetup;
-import org.apache.sling.tooling.lc.aether.ArtifactKey;
-import org.apache.sling.tooling.lc.aether.Artifacts;
-import org.apache.sling.tooling.lc.aether.VersionChange;
-import org.apache.sling.tooling.lc.git.GitChangeLogFinder;
-import org.apache.sling.tooling.lc.jira.Issue;
-import org.apache.sling.tooling.lc.jira.IssueFinder;
+import org.apache.sling.tooling.sc.aether.AetherSetup;
+import org.apache.sling.tooling.sc.aether.ArtifactKey;
+import org.apache.sling.tooling.sc.aether.Artifacts;
+import org.apache.sling.tooling.sc.aether.VersionChange;
+import org.apache.sling.tooling.sc.git.GitChangeLogFinder;
+import org.apache.sling.tooling.sc.jira.Issue;
+import org.apache.sling.tooling.sc.jira.IssueFinder;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-public class LaunchpadComparer {
+public class StarterComparer {
 
     private static final Pattern JIRA_KEY_PATTERN = Pattern.compile("^(SLING-\\d+).*");
 
@@ -53,7 +53,7 @@ public class LaunchpadComparer {
     private final String output;
     private final String slingRepoCheckout;
 
-    public LaunchpadComparer(String firstVersion, String secondVersion, String output, String slingRepoCheckout) {
+    public StarterComparer(String firstVersion, String secondVersion, String output, String slingRepoCheckout) {
         this.firstVersion = firstVersion;
         this.secondVersion = secondVersion;
         this.output = output;
@@ -66,14 +66,13 @@ public class LaunchpadComparer {
 
     public void run() throws Exception {
 
-        System.out.format(
-                "Computing differences between Launchpad versions %s and %s...%n", firstVersion, secondVersion);
+        System.out.format("Computing differences between Starter versions %s and %s...%n", firstVersion, secondVersion);
 
         // 1. download artifacts
         AetherSetup aether = new AetherSetup();
 
-        File fromFile = aether.download(Artifacts.launchpadCoordinates(firstVersion));
-        File toFile = aether.download(Artifacts.launchpadCoordinates(secondVersion));
+        File fromFile = aether.download(Artifacts.starterCoordinates(firstVersion));
+        File toFile = aether.download(Artifacts.starterCoordinates(secondVersion));
 
         // 2. parse artifact definitions
         Map<ArtifactKey, Artifact> from = readArtifactsFromOsgiFeature(fromFile);
@@ -159,7 +158,7 @@ public class LaunchpadComparer {
             List<String> issueKeys =
                     git.getChanges(artifact.getArtifactId(), versionChange.getFrom(), versionChange.getTo()).stream()
                             .map(m -> m.split(System.lineSeparator())[0])
-                            .map(LaunchpadComparer::toJiraKey)
+                            .map(StarterComparer::toJiraKey)
                             .filter(k -> k != null)
                             .collect(Collectors.toList());
 
