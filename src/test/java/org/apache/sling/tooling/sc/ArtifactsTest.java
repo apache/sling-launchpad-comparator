@@ -16,23 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.jira;
+package org.apache.sling.tooling.sc;
 
-public class Fields {
+import org.junit.Test;
 
-    private final String summary;
-    private final IssueType issuetype;
+import static org.apache.sling.tooling.sc.aether.Artifacts.starterCoordinates;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-    public Fields(String summary, IssueType issuetype) {
-        this.summary = summary;
-        this.issuetype = issuetype;
+public class ArtifactsTest {
+
+    @Test
+    public void starterV12() {
+
+        assertThat(
+                starterCoordinates("12"),
+                equalTo("org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:12"));
     }
 
-    public String getSummary() {
-        return summary;
-    }
+    @Test
+    public void starterV13Snapshot() {
 
-    public IssueType getIssuetype() {
-        return issuetype;
+        assertThat(
+                starterCoordinates("13-SNAPSHOT"),
+                equalTo("org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:13-SNAPSHOT"));
     }
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.git;
+package org.apache.sling.tooling.sc.git;
 
 import java.io.IOException;
 import java.nio.file.Path;

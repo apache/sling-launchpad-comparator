@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.jira;
+package org.apache.sling.tooling.sc.jira;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

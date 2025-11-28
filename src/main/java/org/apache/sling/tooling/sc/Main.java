@@ -16,29 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc;
+package org.apache.sling.tooling.sc;
 
-import org.junit.Test;
+public class Main {
 
-import static org.apache.sling.tooling.lc.aether.Artifacts.launchpadCoordinates;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+    public static void main(String[] args) throws Exception {
 
-public class ArtifactsTest {
+        String firstVersion = "12";
+        String secondVersion = "13-SNAPSHOT";
+        String output = "plaintext";
+        if (args.length >= 2) {
+            firstVersion = args[0];
+            secondVersion = args[1];
+        }
+        if (args.length >= 3) {
+            output = args[2];
+        }
 
-    @Test
-    public void launchpadV12() {
-
-        assertThat(
-                launchpadCoordinates("12"),
-                equalTo("org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:12"));
-    }
-
-    @Test
-    public void launchpadV13Snapshot() {
-
-        assertThat(
-                launchpadCoordinates("13-SNAPSHOT"),
-                equalTo("org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:13-SNAPSHOT"));
+        new StarterComparer(firstVersion, secondVersion, output, "..").run();
     }
 }

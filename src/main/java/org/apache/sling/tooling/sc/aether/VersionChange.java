@@ -16,24 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.aether;
+package org.apache.sling.tooling.sc.aether;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+public class VersionChange {
 
-public class Artifacts {
+    private String from;
+    private String to;
 
-    private static final Pattern VERSION_NUMBER = Pattern.compile("^(\\d+)(-SNAPSHOT)?");
+    public VersionChange(String from, String to) {
+        this.from = from;
+        this.to = to;
+    }
 
-    public static final String launchpadCoordinates(String version) {
+    public String getFrom() {
+        return from;
+    }
 
-        Matcher versionMatcher = VERSION_NUMBER.matcher(version);
+    public String getTo() {
+        return to;
+    }
 
-        if (!versionMatcher.matches()) {
-            throw new IllegalArgumentException("Invalid version " + version);
-        }
-
-        // versions 8 and newer use the provisioning model
-        return "org.apache.sling:org.apache.sling.starter:slingosgifeature:oak_tar:" + version;
+    @Override
+    public String toString() {
+        return "VersionChange [" + from + " -> " + to + "]";
     }
 }

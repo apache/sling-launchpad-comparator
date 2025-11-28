@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.tooling.lc.aether;
+package org.apache.sling.tooling.sc.aether;
 
 import java.io.File;
 import java.util.Arrays;

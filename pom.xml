@@ -18,10 +18,10 @@
         <relativePath />
     </parent>
     <groupId>org.apache.sling.tooling</groupId>
-    <artifactId>launchpad-comparator</artifactId>
+    <artifactId>starter-comparator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Apache Sling Launchpad Comparator</name>
-    <description>Command line utility which helps with comparing the artifacts contained by two launchpad instances.</description>
+    <name>Apache Sling Starter Comparator</name>
+    <description>Command line utility which helps with comparing the artifacts contained by two starter instances.</description>
 
     <properties>
         <sling.java.version>11</sling.java.version>
@@ -166,7 +166,7 @@
                 <configuration>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>org.apache.sling.tooling.lc.Main</mainClass>
+                            <mainClass>org.apache.sling.tooling.sc.Main</mainClass>
                         </transformer>
                     </transformers>
                     <!-- Don't propagate signatures from signed jars  -->
